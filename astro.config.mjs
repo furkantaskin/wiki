@@ -15,19 +15,6 @@ export default defineConfig({
               instagram: 'https://instagram.com/muffinisamuffin',
               linkedin: 'https://linkedin.com/in/furkant1',
           },
-          sidebar: [
-              {
-                  label: 'Guides',
-                  items: [
-                      // Each item here is one entry in the navigation menu.
-                      { label: 'Example Guide', slug: 'guides/example' },
-                  ],
-              },
-              {
-                  label: 'Reference',
-                  autogenerate: { directory: 'reference' },
-              },
-          ],
 		  customCss: ['./src/styles/global.css']
       }),
 	],
