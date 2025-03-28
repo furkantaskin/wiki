@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import starlightThemeObsidian from "starlight-theme-obsidian";
 
 import tailwindcss from '@tailwindcss/vite';
 
@@ -15,7 +16,18 @@ export default defineConfig({
               instagram: 'https://instagram.com/muffinisamuffin',
               linkedin: 'https://linkedin.com/in/furkant1',
           },
-		  customCss: ['./src/styles/global.css']
+          sidebar: [
+            {
+              label: ".NET, ASP.NET Core ve Blazor",
+              autogenerate: {directory: "dotnet"},
+            },
+            {
+              label: "C#",
+              autogenerate: {directory: "dotnet/csharp"}
+            }
+          ],
+		  customCss: ['./src/styles/global.css'],
+      plugins: [starlightThemeObsidian()]
       }),
 	],
 
