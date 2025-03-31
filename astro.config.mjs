@@ -7,6 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://furkantaskin.github.io/wiki',
   integrations: [
       starlight({
           title: 'Personal Docs',
@@ -19,11 +20,9 @@ export default defineConfig({
           sidebar: [
             {
               label: ".NET, ASP.NET Core ve Blazor",
-              autogenerate: {directory: "dotnet"},
-            },
-            {
-              label: "C#",
-              autogenerate: {directory: "dotnet/csharp"}
+              items: [
+                { label: "C#", autogenerate: {directory: "dotnet/csharp"} },
+              ]
             }
           ],
 		  customCss: ['./src/styles/global.css'],
