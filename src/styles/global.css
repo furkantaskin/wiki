@@ -4,3 +4,16 @@
 .expressive-code code .ec-line{
     margin-top: 0;
 }
+
+.sl-markdown-content > ul, .sl-markdown-content > ul ul{
+    list-style: initial;
+    padding-left: 1.5em;
+}
+
+.sl-markdown-content table{
+    width: 100%;
+}
+
+.sl-markdown-content table :is(thead, tbody){
+    width: 100%;
+}

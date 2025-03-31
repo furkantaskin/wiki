@@ -1,15 +1,21 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import { astroExpressiveCode } from '@astrojs/starlight/expressive-code';
 import starlightThemeObsidian from "starlight-theme-obsidian";
 
 import tailwindcss from '@tailwindcss/vite';
-import { astroExpressiveCode } from '@astrojs/starlight/expressive-code';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://furkantaskin.github.io/wiki',
   base: '/wiki',
+  markdown: {
+    syntaxHighlight: {
+      type: "shiki",
+      excludeLangs: ["math", "mermaid"]
+    }
+  },
   integrations: [
     astroExpressiveCode({
       themes: ["one-dark-pro", "github-light"]
@@ -30,7 +36,7 @@ export default defineConfig({
               label: "C#", items: [
                 { label: "Temel Bilgiler", link: "/dotnet/csharp/temel-bilgiler" },
                 { label: "Program Yapısı", link: "/dotnet/csharp/program-yapisi" },
-                
+                { label: "C# Tipleri", link: "/dotnet/csharp/tipler"},
               ]
             },
           ]

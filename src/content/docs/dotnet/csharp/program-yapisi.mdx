@@ -3,6 +3,75 @@ title: C# için Program Yapısı
 description: C# için program yapısı ve temel bilgilerine dair bilgiler.
 ---
 
+import { Aside } from '@astrojs/starlight/components';
+
 ## Genel Yapısı
 
-C# içinde çok sayıda dosya ile işlem yapabiliriz ve bu dosyalarda 0'dan dilediğimiz sayıya kadar [isim alanı](/wiki/dotnet/csharp/temel-bilgiler) barındırabiliriz
+C# içinde çok sayıda dosya ile işlem yapabiliriz ve bu dosyalarda 0'dan dilediğimiz sayıya kadar [isim alanı](/wiki/dotnet/csharp/temel-bilgiler) barındırabiliriz.
+
+Bir C# programı başta top-level bir tanımlama olup olmadığına bakar. Eğer varsa direkt olarak bunu baz alır, yoksa bir isim alanı içinde arama yaparak açılış için gereken metodları arar. Örnek olarak
+
+```csharp
+using System;
+
+console.WriteLine("Hello World!");
+```
+
+Bu şekildeki bir kullanım top-level statement olarak geçmektedir. Dilersek bunu aşağıdaki gibi bir namespace mantığı ile de yazabiliriz ki genelde bu tarz bir kullanım daha iyi olacaktır. Çünkü uygulamamayı ya da sistemi bir namespace içinde tutmak aslında düzenlilik ve bakım açısından daha iyi bir yöntemdir.
+
+```csharp del={3} ins={5-11}
+using System;
+
+Console.WriteLine("Hello World!");
+
+namespace MyApp{
+    class Program{
+        static void Main(){
+            Console.WriteLine("Hello World!");
+        }
+    }
+}
+```
+
+<Aside type="caution" title="Önemli">
+    Bir programda sadece bir giriş noktası olabilir. Sistem giriş olarak `Main` metodu arayacaktır. Eğer birden fazla giriş varsa bu durumda derleyicide **StartupObject** ayarlanması gerekmektedir. (Detaylı bilgi için [MSDN](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/advanced#mainentrypoint-or-startupobject)). 
+</Aside>
+
+### `Main` metodu
+
+Main metodu programımızın giriş noktasıdır. Bu metod için bazı şartlar vardır
+
+- `Main` metodu bir sınıf veya struct içinde olmalıdır.
+- Statik olmalıdır
+- Herhangi bir erişim belirleyicisi olabilir. (public, private, internal, protected)
+- `Main` metodu `void`, `int`, `Task` veya `Task<int>` dönebilir. Eğer `int` veya `Task<int>` dönerse bu durumda sistemin çıkış kodu olarak kullanılacaktır. (0, 1 gibi).
+- `Main` metodu `string[] args` parametresini alabilir. Bu parametre programın çalıştırıldığı sırada verilen argümanları tutmaktadır. Eğer bu parametre yoksa sistem varsayılan olarak `args` isimli bir dizi oluşturacaktır. (Bu durumda `args` dizisi boş olacaktır).
+
+Bu maddelere dayanarak `Main` metodu şu şekilde oluşturulabilir.
+
+```csharp
+namespace MyApp{
+    class Program{
+        static void Main() { }
+        static int Main() { }
+        static void Main(string[] args) { }
+        static int Main(string[] args) { }
+        static async Task Main() { }
+        static async Task<int> Main() { }
+        static async Task Main(string[] args) { }
+        static async Task<int> Main(string[] args) { }
+    }
+}
+```
+
+Burada `Main` metodu `Task<int>` veya `int` tipi alması durumunda başarılı sonuç oluşması ihtimalinde nihai olarak `return 0` ile bitmelidir (bunu [Wikipedia](https://en.wikipedia.org/wiki/Exit_status) üzerinden görebiliriz). Diğer durumlar için gerekli hata kodları gönderilebilir.
+
+<Aside type="tip" title="İpucu">
+    `int` tipi dönüşlü programların bitiş kodlarını `ERRORLEVEL` ortam değişkeni ile veya PowerShell kullanıyorsak `$LastExitCode` değişkeni ile okuyabiliriz. Örneğin basit bir PowerShell scripti düşünürsek
+
+    ```ps1
+    dotnet run
+    Write-Host $LastExitCode
+    ```
+    şeklinde programın çıkış kodunu alabiliriz.
+</Aside>

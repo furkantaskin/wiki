@@ -1,0 +1,70 @@
+---
+title: "Tipler"
+description: "C#'da kullanılan temel tipler ve bunların kullanımı"
+---
+
+## C# Tipleri
+
+C# [temel bilgilerde](/wiki/dotnet/csharp/temel-bilgiler) belirttiğimiz üzere statik bir dildir. Bu yüzden değişkenlerin tipleri derleme zamanında belirlenmektedir. Örnek bir değişkende tipler şunlar olabilir
+
+- Kapasitesi
+- Alabileceği üst ve alt sınırdaki değerler
+- İçerdiği üyeler (metodlar, eventler vb.)
+- Esinlendiği (inherit) diğer tipler
+- Aldığı interfaceler.
+
+Bu durumları baz alırsak aşağıdaki şekilde tip tanımlamaları yapılabilir.
+
+```csharp
+bool isActive = true;
+int myInt = 10;
+string name; // Değişken tanımlamadan da olabilir
+char getLetter = "A";
+ExampleClass myClassVariable;
+
+int[] intArray = [1,2,3];
+```
+
+Eğer bir tip tanımlaması yapıldıysa bu değişkeni farklı bir tiple yeniden **tanımlayamayız**.
+
+## Temel Veri Tipleri
+
+C# içindeki diğer bütün programlama dillerinde olduğu gibi temel veri tipleri vardır. Hepsini yazmadan önemli olanları belirteceğiz.
+
+
+Numerik olan tiplerde bildiğimizden biraz daha farklı ifadeler vardır.
+
+| Tip | Minimum Değer | Maksimum Değer | C# Karşılığı |
+| ---- | -------------- | -------------- | ----------  |
+| byte | 0 | 255 | System.Byte |
+| sbyte | -128 | 127 | System.Sbyte |
+| short | -32,768 | 32,767 | System.Int16 |
+| ushort | 0 | 65,535 | System.UInt16 | 
+| int | -2,147,483,648 | 2,147,483,647 | System.Int32 |
+| uint | 0 | 4,294,967,295 | System.UInt32 | 
+| long | -9,223,372,036,854,775,808 | 9,223,372,036,854,775,807 | System.Int64 |
+| ulong | 0 | 18,446,744,073,709,551,615 | System.UInt64 |
+| nint | Platforma bağlı | Platforma bağlı | System.IntPtr |
+| nuint | Platforma bağlı | Platforma bağlı | System.UIntPtr |
+
+Yukarıdaki tipler varsayılan olarka 0 (sıfır) değerini alır.
+
+Örnek olarak
+
+```csharp
+byte exampleNumber = 10;
+
+// Üstteki ile aynı ifadeye denk gelmektedir
+System.Byte exampleNumber = 10;
+```
+
+Bunların yanı sıra bool, char, decimal, double ve float gibi tipler de vardır.
+
+Reference tipinde düşünürsek de object, string, delegate ve dynamic de vardır.
+
+Burada önemli olan `dynamic` tipidir. Çünkü bu tip diğerleri gibi derlenme aşamasında statik olarak değeri almak yerine tıpkı Python'daki gibi çalışma zamanında (runtime) tipini almaktadır.
+
+Burada ekstra olarak `Span<T>` şeklinde bir tip vardır ancak bunun için C#'ın garbage collector yapısını, stack ve heap terimlerini detaylıca anlamamız gerektiği için es geçiyorum. Kısaca bilinmesi gereken şey
+
+- `stack`: Hızlı erişim sağlanması gereken temel değişkenleri tutar ancak alanı dardır.
+- `heap`: stack ile karşılaştırıldığında daha yavaş kalır ancak daha kapsamlı nesneleri tutar. Garbage Collector burada çalışır.
