@@ -12,7 +12,7 @@ export default defineConfig({
   base: '/wiki',
   integrations: [
     astroExpressiveCode({
-      themes: ["github-dark-dimmed", "github-light"]
+      themes: ["one-dark-pro", "github-light"]
     }),
     starlight({
       title: 'Personal Docs',
