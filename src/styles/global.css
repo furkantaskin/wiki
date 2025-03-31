@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+
+.expressive-code code .ec-line{
+    margin-top: 0;
+}

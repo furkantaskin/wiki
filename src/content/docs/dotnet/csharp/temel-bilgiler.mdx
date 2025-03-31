@@ -1,0 +1,59 @@
+---
+title: C# Nedir
+description: C# nedir ve C# içindeki temel işlemler nasıl yapılır.
+---
+
+import { Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Temel Olarak C# Nedir?
+
+C#, static programlama dili olmakla birlikte tıpkı java gibi kullanımda OOP ağırlık gütmektedir. Burada aslında TypeScript'e benzer bir kullanım görüyoruz. Yani değişkenler hem implicit hem de explicit olarak tipini alabilmektedir. Örneğin aşağıda bir string değişken tanımlaması yapıyoruz.
+
+<Tabs>
+    <TabItem label="TS">
+    ```ts
+    //Implicit declaration
+    var myName = "Furkan";
+
+    //Explicit declaration
+    var myName: string = "Furkan";
+
+    myName.foreach((elem) => {
+        console.log(elem.toUpperCase());
+    })
+    ```
+    </TabItem>
+    <TabItem label="C#">
+    ```csharp
+    //Implicit declaration
+    var myName = "Furkan";
+
+    //Explicit declaration
+    string myName = "Furkan";
+    ```
+    </TabItem>
+</Tabs>
+
+
+C#'ın OOP ağırlıklı bir dil olduğunu söylemiştik. Bunu kesin bizden istemese de arka tarafında bunu kendisi dahil etmektedir. En temel haliyle bir Hello World uygulaması bizim tarafımızca isim alanı[^1] olmadan şu şekilde yazılabilir.
+
+```csharp
+Console.WriteLine("Hello World!");
+```
+
+Her ne kadar görmüyor olsak da `System` isim alanının `Console` sınıfına ait `WriteLine` metodu ile biz ekrana çıktıyı veriyoruz. Buradaki `System` isim alanı C# tarafından alt tarafla eklenmektedir. Yani tüm gizli yapıları göz önünde bulundurursak kodumuz şu şekilde olacak
+
+```csharp
+using System;
+using MyApp; //Uygulamamızın isim alanı
+
+class Program {
+    static void Main(){
+        Console.WriteLine("Hello World!");
+    }
+}
+```
+
+
+[^1]: **isim alanı**
+:   `namespace` demektir. Kendi içinde sınıfları, structları ve enumları kapsayarak aynı isimdeki bu türk ögelerin birbiri ile çakışmasnıı önler.
