@@ -1,0 +1,85 @@
+---
+title: "Kapsamlı Türler"
+description: "C# içinde namespace, class gibi kapsamlı türlere genel bir bakış"
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Buradaki başlık biraz konu dışı görünse de buradaki kastımız aslında namespace, class, record, interface gibi türleri içermektedir. Bunları önceki konularda zaten değinmiştik, sıra detaylıca görmeye geldi.
+
+
+## Namespace
+
+Namespace, aslında C ailesinden alışkın olduğumuz kapsayıcı alnlardır. Kendi içlerinde interface, enum, class ve başka namespaceleri de kapsayabilen türlerdir. Proje büyüdükçe aynı isme sahip class veya metodların kendi içinde çakışmasını önlemek ve kodun daha verimli organize edilmesini sağlar. Kendi içinde başka avantajları olsa da şimdilik bu kısımları bilmekte fayda var. 
+
+Aslında [önceki konularda](/wiki/dotnet/csharp/program-yapisi#main-metodu) bir namespace yapısı görmüştük. Genel kullanım şu şekildedir:
+
+```csharp
+namespace MyNamespace
+{
+    class MyClassVariable
+    {
+        public void ExampleMethod()
+        {
+            System.Console.WriteLine("Merhaba dünyalı!")
+        }
+    }
+}
+```
+
+Buradaki önemli noktalardan bir tanesi de C#'ın [isimlendirme kuralları ve önerileri](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/identifier-names) olacaktır. C# bu kısımda namespace, class, tip ve public üyeler (metodlar, özellikler) için PascalCase önermektedir. 
+
+Buna ekstra olarak eğer dosya içinde tek namespace olacaksa kapsayıcı bir süslü parantez olmadan da kullanılabilir. Örnek olarak 
+
+```csharp
+namespace MyNamespaceWithoutBrackets;
+
+class MyClassVariable
+{
+    public void ExampleMethod()
+    {
+        System.Console.WriteLine("Merhaba dünyalı!")
+    }
+}
+```
+
+Eğer ki namespace çağırmak gerekiyorsa bunu `using` anahtar kelimesi ile yaparız.
+
+<Tabs>
+    <TabItem label='TryingNamespace.cs'>
+    ```csharp
+    namespace AnotherNamespace
+    {
+        public class TryingNamespaces
+        {
+            public static void AnotherMethod()
+            {
+                Console.WriteLine("Hello from AnotherClass!");
+            }
+        }
+    }
+    ```
+    </TabItem>
+    <TabItem label='Program.cs'>
+    ```csharp
+    using AnotherNamespace;
+
+    namespace LearningDotnet
+    {
+        internal class Program
+        {
+            static void Main()
+            {
+                TryingNamespaces.AnotherMethod();
+            }
+        }
+    }
+    ```
+    </TabItem>
+</Tabs>
+
+
+Burada `AnotherMethod` classına ve metoda erişebilmemiz için public alması gerektiğini unutmamak lazım. Çünkü classlar ve metodlar varsayılan olarak internal çalışmaktadır ve dışarıya açık değillerdir.
+
+
+## Class

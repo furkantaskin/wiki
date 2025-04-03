@@ -3,6 +3,9 @@ title: "Tipler"
 description: "C#'da kullanılan temel tipler ve bunların kullanımı"
 ---
 
+import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
+
+
 ## C# Tipleri
 
 C# [temel bilgilerde](/wiki/dotnet/csharp/temel-bilgiler) belirttiğimiz üzere statik bir dildir. Bu yüzden değişkenlerin tipleri derleme zamanında belirlenmektedir. Örnek bir değişkende tipler şunlar olabilir
@@ -69,8 +72,6 @@ Burada ekstra olarak `Span<T>` şeklinde bir tip vardır ancak bunun için C#'ı
 - `stack`: Hızlı erişim sağlanması gereken temel değişkenleri tutar ancak alanı dardır.
 - `heap`: stack ile karşılaştırıldığında daha yavaş kalır ancak daha kapsamlı nesneleri tutar. Garbage Collector burada çalışır.
 
-
-
 ## Özel Tipler
 
 C# içinde çeşitli özel tipler vardır. Bunlar:
@@ -82,3 +83,55 @@ C# içinde çeşitli özel tipler vardır. Bunlar:
 - `record`
 
 şeklindedir.
+
+Bu tiplerin kullanımları ileri konularda detaylıca yer edinecektir. Şu an için .NET ekosistemine hakimiyet olmadığı için kafa karıştırabilir.
+
+## Generic Tipler
+
+TypeScript içinde de birçok noktada da gördüğümüz bu tipler daha çok placeholder gibi davranır. Örnek olarak kullanıcıdan gelen verilerden dizi oluşturan bir fonksiyon olsun 
+
+
+<Tabs>
+    <TabItem label="TS">
+    ```ts
+    function arrayGenerator<T>(firstArg: T, secondArg: T): Array<T>{
+        return [firstArg, secondArg];
+    }
+
+    console.log(arrayGenerator<number>(1,2));
+    ```
+    </TabItem>
+    <TabItem label="C# (With Array Initialize)">
+    ```csharp {8}
+    using System; 
+
+    T[] ToArray<T>(T first, T second)
+    {
+        return new T[] { first, second };
+    }
+
+    Console.WriteLine(string.Join(", ", ToArray<byte>(1,2)))
+    ```
+    </TabItem>
+    <TabItem label="C# (With Generics)">
+    ```csharp {9} ins={2}
+    using System; 
+    using System.Collections.Generic;
+
+    List<T> ToArray<T>(T first, T second)
+    {
+        return new List<T> { first, second };
+    }
+
+    Console.WriteLine(string.Join(", ", ToArray<byte>(1,2)))
+    ```
+    </TabItem>
+</Tabs>
+
+
+<Aside type='danger' title='Önemli'>
+- Burada aslında ciddi farklılıklar var. Çünkü `Console.WriteLine` metodu içeride `ToString()` metodu çağırarak içindeki argümanı ekrana yazdıracaktır. Bundan dolayı JS/TS'teki gibi direkt olarak ekrana liste veya array bastırmamaktadır. Buradaki değişimi sağlamak için fonksiyondan dönen ifadeyi `Join` metodu ile birleştirmemiz gerekmektedir.
+- Ayrıca `List<T>` şeklinde bir kullanım için burada `System.Collections.Generic` namespacei gerekmektedir
+</Aside>
+
+Buradan da anlaşılacağı üzere generic tipler bazı namespacelere ihtiyaç duyabilir ve C#'ın OOP temelinden dolayı `new` anahtar kelimesi ile atanır. Örnek olarak bir string listesi için `List<string> myStringList = new List<string>();` şeklinde bir kullanım yapılabilir. Tabii ki burada `System.Collections.Generic` namespaceini dahil etmeyi unutmamak lazım.

@@ -37,6 +37,7 @@ export default defineConfig({
                 { label: "Temel Bilgiler", link: "/dotnet/csharp/temel-bilgiler" },
                 { label: "Program Yapısı", link: "/dotnet/csharp/program-yapisi" },
                 { label: "C# Tipleri", link: "/dotnet/csharp/tipler"},
+                { label: "Kapsamlı Türler", link: "/dotnet/csharp/kapsamli-turler"},
               ]
             },
           ]
