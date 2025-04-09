@@ -1,6 +1,7 @@
 ---
 title: "Tipler"
 description: "C#'da kullanılan temel tipler ve bunların kullanımı"
+keywords: heap, stack
 ---
 
 import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
@@ -69,8 +70,12 @@ Burada önemli olan `dynamic` tipidir. Çünkü bu tip diğerleri gibi derlenme 
 
 Burada ekstra olarak `Span<T>` şeklinde bir tip vardır ancak bunun için C#'ın garbage collector yapısını, stack ve heap terimlerini detaylıca anlamamız gerektiği için es geçiyorum. Kısaca bilinmesi gereken şey
 
-- `stack`: Hızlı erişim sağlanması gereken temel değişkenleri tutar ancak alanı dardır.
-- `heap`: stack ile karşılaştırıldığında daha yavaş kalır ancak daha kapsamlı nesneleri tutar. Garbage Collector burada çalışır.
+<div id="#heap-stack-note">
+
+- `stack`: Hızlı erişim sağlanması gereken temel değişkenleri tutar ancak alanı dardır. Fonksiyon çağrıları, local değişkenler vb. temel veriler burada tutulur. Çağrılan fonksiyonun sürecini bitirmesi sonrasında kendini boşaltır. 
+- `heap`: stack ile karşılaştırıldığında daha yavaş kalır ancak daha kapsamlı nesneleri tutar. Garbage Collector burada çalışır. Genel kapsamda erişilmesi gereken nesneler ve değişkenler burada tutulur. C ve C++ gibi dillerde memory management gereken yer aslında burasıdır. 
+
+</div>
 
 ## Özel Tipler
 

@@ -1,0 +1,45 @@
+---
+title: Cheatsheet
+description: .NET ile ilgili kısa notlar
+---
+
+## CLI
+
+En temel komutlar şu şekildedir
+
+```powershell title="PowerShell"
+dotnet new console
+```
+
+Yeni .NET konsol uygulaması başlatır. Template tipleri için [MSDN](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-new#arguments) incelenebilir.
+
+Örneğin .NET 9.0 ve C# kullanarak BlazorExample isimli bir proje oluşturup oluşturma sürecini diagnose etmek için gereken kod 
+
+```powershell title=".NET CLI"
+dotnet new blazor -f net9.0 -o ./blazor_example -n BlazorExample -v n --diagnostics  -lang "C#"
+```
+
+Aşağıdaki kod dotnet projesini dev olarak derlemeyi sağlar.
+```powershell title=".NET CLI"
+dotnet run
+```
+
+Aşağıdaki kod ise projeyi watch mode ile hot reload yaparak dev modunda build almayı sağlar.
+```powershell title=".NET CLI"
+dotnet watch 
+```
+
+Aşağıdaki kod proje çıktısını temizler
+```powershell title=".NET CLI"
+dotnet clean
+```
+
+Aşağıdaki kod proje dosyalarını formatlar (`editorConfig` baz alınır)
+```powershell title=".NET CLI"
+dotnet format
+```
+
+Aşağıdaki kod projeyi final formatında build alır
+```powershell title=".NET CLI"
+dotnet build --configuration Release
+```

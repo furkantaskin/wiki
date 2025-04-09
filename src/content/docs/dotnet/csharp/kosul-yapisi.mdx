@@ -1,0 +1,106 @@
+---
+title: "Koşul Yapısı"
+description: "C# içindeki if-else ve switch gibi koşul yapıları"
+tags: if, else, switch, pattern matching, ternary
+---
+
+C# da diğer diller gibi kendi içinde `if-else` ve `switch` barındırmaktadır. Ancak burada pattern matching daha dikkat içerebilir.
+
+
+## `if-else`
+
+Aslında bunlara C ailesinden hakimiz. Klasik bir koşul yapısı şu şekildedir.
+
+
+```csharp
+using System; 
+
+namespace MyNamespace
+{
+    class Program
+    {
+        public static void Main()
+        {
+            int a = 3;
+            int b = 5;
+
+            if (a < b){
+                Console.WriteLine("a sayısı b'den küçüktür");
+            } else if (a == b) {
+                Console.WriteLine("a sayısı b'ye eşittir");
+            } else{
+                Console.WriteLine("a sayısı b'den büyüktür");
+            }
+        }
+        
+    }
+}
+```
+
+Bunlara ek olarak biraz daha ileri konulara girersek `is`, `not` gibi farklı durumlar da göreceğiz. Özellikle pattern matching mantığını burada görebiliriz. Örneğin `if(myElem is not null)` gibi kullanımlar mevcuttur. Python'daki gibi değer yerine göre veri tipine göre değerlendirir.
+
+Çok detaya gerek yok aslında. Bunlara birçok dilden zaten hakimiz. Switch'te de aynı durum var
+
+
+```csharp
+using System;
+namespace LearningDotnet
+{
+    class Program
+    {
+        static void Main()
+        {
+            Console.Write("Lütfen sayınızı girin: ");
+            int myNumber = Convert.ToInt32(Console.ReadLine());
+
+            switch (myNumber)
+            {
+                case < 0:
+                    Console.WriteLine("Sayı negatif");
+                    break;
+                case 0:
+                    Console.WriteLine("Sayı sıfır");
+                    break;
+                case > 0:
+                    Console.WriteLine("Sayı pozitif");
+                    break;
+            }
+        }
+    }
+}
+```
+
+
+Hatta JS içindeki gibi süslü parantez ile tanımlama da yapabiliriz case içine
+
+
+```csharp {13-18}
+namespace LearningDotnet
+{
+    class Program
+    {
+        static void Main()
+        {
+            Console.Write("Lütfen sayınızı girin: ");
+            int myNumber = Convert.ToInt32(Console.ReadLine());
+
+            switch (myNumber)
+            {
+                case < 0:
+                    {
+                        int negativeNumber = myNumber;
+                        Console.WriteLine(negativeNumber * negativeNumber);
+                        Console.WriteLine("Sayı negatif");
+                        break;
+                    }
+                case 0:
+                    Console.WriteLine("Sayı sıfır");
+                    break;
+                case > 0:
+                    Console.WriteLine("Sayı pozitif");
+                    break;
+            }
+        }
+    }
+}
+```

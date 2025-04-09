@@ -1,0 +1,262 @@
+---
+title: Cheatsheet
+description: C# ile ilgili kısa notlar
+tags: msbuild, variables, pattern matching
+---
+
+import { Aside, Tabs, TabItem } from "@astrojs/starlight/components";
+
+Bu kısımda önceki konuların özetleri bulunabilir ya da konu olarak açmak istemediğim notları tutabilirim.
+
+## Değişken Tipleri ve Tanımlamaları
+
+C# kendi içinde çok sayıda veri tipi desteklemektedir. Genelde bunlar değer tipi ve referans tipi olarak ayrılmaktadır. Bunlar notlarda mevcuttur. Özetle temel numerik ifadeler (int, float, decimal vb.), bool ifadeler, char, enum ve struct gibi ifadeler değer tipidir. Class gibi ifadeler ise referans tipi olarak geçer.
+Explicit veya implicit tip tanımlaması olabilir. Yani `var myName = 2` de `int myName = 2` de geçerli tanımlamalardır.
+Tiplerde null olma durumu göz önünde bulundurularak opsiyonel tanımlama da yapılabilir. Örneğin `int? myNumber = null` şeklinde bir tanım da olabilir.
+
+
+## Operatörler
+
+Aritmetik operatörler olarak genel bilinen aritmetik operatörler vardır. 
+
+Mantıksal operatörler biraz daha kapsamlıdır. Örneğin mantıksal `AND` operatörü iki farklı konsept içermektedir. Birisi tek ampersand (`&`) iken diğeri çift ampersand (`&&`) olur.
+
+Mantıksal AND operatöründe (`&`) sağdaki kısım metot çağırıyorsa eğer her türlü işlemi yapar ancak mantıktaki ve durumu göz önünde alınır. Bu durumda soldaki ifade `false` ise sğdaki ifadenin `true` ya da `false` çevirmesinin bir anlamı olmaz.
+
+```csharp
+bool SecondOperand()
+{
+    Console.WriteLine("You're gonna see this no matter what");
+    return true;
+}
+
+bool a = false & SecondOperand(); // False değeri olacak ama ekrana çıktıyı verecektir.
+bool a = true & SecondOperand(); // True değeri alacak ve ekrana çıktıyı verecektir.
+```
+
+Ancak koşullu mantıksal AND operatöründe (`&&`) - ki biz bu ifadeyi Python içinde short-circuiting olarak da biliriz- iki tarafı da hesaba katar ve sol taraf burada gerekirse kesici gibi davranır. Yani mantıksal AND operatörü gibi sağ taraf kesin çalışmaz. Sol taraf `false` alıyorsa sağ taraf tamamen iptal olur. 
+
+```csharp
+bool SecondOperand()
+{
+    Console.WriteLine("You're gonna see this no matter what");
+    return true;
+}
+
+bool a = false && SecondOperand(); // False değeri olacak ve çıktı vermeyecektir
+bool a = true && SecondOperand(); // True değeri alacak ve ekrana çıktıyı verecektir.
+```
+
+Mantıksal XOR operatörü (`^`) de C# içinde mevcuttur. Temel olarak sağdaki ve soldaki ifade aynı olursa `false`, diğer durumda `true` döner. Yani 
+
+```csharp
+Console.WriteLine(true ^ true);    // output: False
+Console.WriteLine(true ^ false);   // output: True
+Console.WriteLine(false ^ true);   // output: True
+Console.WriteLine(false ^ false);  // output: False
+```
+
+Mantıksal OR operatörü (`|`) ise tıpkı mantıksal AND operatörü gibi çalışır ancak bu durumda soldaki ya da sağdaki ifadeden herhangi birisi `true` ise sonuç da `true` olacaktır. Yine mantıksal AND operatörü gibi metotlar kesin çalışır ancak dönüşleri önemli değildir. Yani soldaki ifade `true` ise sağdaki metotun `return false` kısmı bizim için önemsizdir.
+
+```csharp
+bool SecondOperand()
+{
+    Console.WriteLine("You're gonna see this no matter what");
+    return true;
+}
+
+bool a = false | SecondOperand(); // True değeri olacak ve ekrana çıktıyı verecektir.
+bool a = true | SecondOperand(); // True değeri olacak ve ekrana çıktıyı verecektir.
+```
+
+Aynı şekilde koşullu OR operatöründe de işler biraz değişir. 
+
+```csharp
+bool SecondOperand()
+{
+    Console.WriteLine("You're gonna see this no matter what");
+    return true;
+}
+
+bool a = false || SecondOperand(); // True değeri olacak ve ekrana çıktıyı verecektir.
+bool a = true || SecondOperand(); // True değeri alacak ama ekrana çıktıyı vermeyecektir.
+```
+## Koleksiyonlar
+
+Koleksiyonlar, arraylere benzerlik gösterse de kendi içinde sabit bir ölçüsü olmayan dinamik yapılardır. `List<T>` bunlardan birisidir. Aslında JS içindeki arrayleri bu kısımda değerlendirebiliriz. Tabii sadece bunları içermez, birden fazla tip barındırır. Basit bir hiyerarşide 
+
+```plain
+IEnumerable<T>
+    ↳ ICollection<T>
+        ↳ IList<T>
+            ↳ List<T>
+```
+
+Bu tür bir yapıda `foreach` ile gezebiliriz. Örnek olarak şu şekilde bir döngü mümkündür.
+
+```csharp
+List<string> weekDays = ["Monday", "Tuesday", "Wednesday"];
+foreach (var day in weekDays){
+    Console.WriteLine(day);
+}
+```
+
+### Indeksleme İşlemleri 
+
+JS'te olmayıp Python'da olan ters indeks operatörü burada da vardır. Örneğin bir dizinin son elemanına erişmemiz gerekiyorsa son elemenanın indeksi -1 olacak şekilde `listName[^1]` yaparak erişebiliriz. Bu ifade, `listName` isimli listenin son elemanını getirmeyi sağlar. Aynı şekilde `listName[^2]` ise sondan ikinci elemanı getirecektir. Bunu range işlemlerinde de kullanabiliriz. Yani 
+
+```csharp
+List<int> numbers = [1,2,3,4,5,6];
+int start = 1;
+int amonutToTake = 3;
+int[] subset = numbers[start..(start+amountToTake)]; // Bu durumda 2,3,4 ifadelerine karşılık gelir
+
+int margin = 1;
+int[] inner = numbers[margin..^margin]; // Bu durumda 2,3,4,5 ifadelerine karşılık gelir.
+```
+
+Buradaki indexing ve slicing tıpkı Python'daki gibi son ifade exclusive olacak şekilde çalışmaktadır. Şu şekilde örneklendirebiliriz:
+
+<Tabs>
+    <TabItem label="Python">
+    ```py
+    week_days: List[str] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    work_days: List[str] = week_days[0:5]
+    ```
+    </TabItem>
+    <TabItem label="C#">
+    ```csharp
+    List<str> weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    List<str> workDays = weekDays[0..5];
+    ```
+    </TabItem>
+</Tabs>
+
+## Lambda Fonksiyonlar
+
+Hem Python hem JS dillerinden (arrow function) hakim olduğumuz fonksiyonlardır. Hızlı tanımlamalarla return işlemi yapabilmemizi sağlar. Örnek olarak verilen değerin karesini döndüren fonksiyonu düşünlebiliriz. 
+
+```csharp
+Func<int, int> square = x => x * x;
+Console.WriteLine(square(5)); // 25 çıktısı verir
+```
+
+## Null Kontrol Operatörler
+
+JS içindeki `?.` operatör burada da mevcuttur. Yani `Animal?.Bark()` metodu eğer mevcutsa çalışacaktır. Yani `Animal` eğer null ise `Bark` metodu ile vakit kaybetmeyecektir.
+
+## Konfigürasyon
+
+Bir uygulamada birden fazla Main method girişi olamaz. Varsa da build konfigürasyonunda ayarlanması gerekir. Proje konfigürasyonu yapılacaksa `*.csproj` içinden yapılabilir. Burada MSBuild özellikleri kullanılarak yapılabilir.
+
+
+## Kontrol Akışı
+
+```csharp
+namespace MyNamespace
+{
+    public static class SwitchExample
+    {
+        public enum Direction
+        {
+            Up,
+            Down,
+            Right,
+            Left
+        }
+
+        public enum Orientation
+        {
+            North,
+            South,
+            East,
+            West
+        }
+
+        public static Orientation ToOrientation(Direction direction) => direction switch
+        {
+            Direction.Up    => Orientation.North,
+            Direction.Right => Orientation.East,
+            Direction.Down  => Orientation.South,
+            Direction.Left  => Orientation.West,
+            _ => throw new ArgumentOutOfRangeException(nameof(direction), $"Not expected direction value: {direction}"),
+        };
+
+        public static void Main()
+        {
+            var direction = Direction.Right;
+            Console.WriteLine($"Map view direction is {direction}");
+            Console.WriteLine($"Cardinal orientation is {ToOrientation(direction)}");
+            // Output:
+            // Map view direction is Right
+            // Cardinal orientation is East
+        }
+    }
+}
+```
+
+Daha sade bir örnek için 
+
+```csharp
+public static decimal GetGroupTicketPrice(int visitorCount) => visitorCount switch
+{
+    1 => 12.0m,
+    2 => 20.0m,
+    3 => 27.0m,
+    4 => 32.0m,
+    0 => 0.0m,
+    _ => throw new ArgumentException($"Not supported number of visitors: {visitorCount}", nameof(visitorCount)),
+};
+```
+
+Aynı şekilde ternary operatör de JS içindeki ile aynı mantıkta çalışır.
+
+```csharp
+string GetWeatherDisplay(double tempInCelsius) => tempInCelsius < 20.0 ? "Cold." : "Perfect!";
+
+Console.WriteLine(GetWeatherDisplay(15));  // output: Cold.
+Console.WriteLine(GetWeatherDisplay(27));  // output: Perfect!
+```
+
+
+## Özel Karakterler
+
+String interpolation ve verbatim string dediğimiz iki terim burada bizim için kritik rol oynamaktadır. String içine değişken tanımlarken uğraşmamak için hızlı bir şekilde string interpolation yapabiliriz. 
+
+```csharp
+var name = "Mark";
+var date = DateTime.Now;
+
+// Composite formatting:
+Console.WriteLine("Hello, {0}! Today is {1}, it's {2:HH:mm} now.", name, date.DayOfWeek, date);
+// String interpolation:
+Console.WriteLine($"Hello, {name}! Today is {date.DayOfWeek}, it's {date:HH:mm} now.");
+// Both calls produce the same output that is similar to:
+// Hello, Mark! Today is Wednesday, it's 19:40 now.
+```
+
+Bu sayede daha okunabilir formatta string elde edebiliriz. 
+
+Aynı şekilde özel karakter içeren stringler için de verbatim text kullanarak ilerleyebiliriz 
+
+```csharp
+string filename1 = @"c:\documents\files\u0066.txt";
+string filename2 = "c:\\documents\\files\\u0066.txt";
+
+Console.WriteLine(filename1);
+Console.WriteLine(filename2);
+// The example displays the following output:
+//     c:\documents\files\u0066.txt
+//     c:\documents\files\u0066.txt
+```
+
+Pyton'daki docstring burada da vardır.
+
+```csharp
+var xml = """
+        <element attr="content">
+            <body>
+            </body>
+        </element>
+        """;
+```

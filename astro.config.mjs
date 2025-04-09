@@ -38,7 +38,14 @@ export default defineConfig({
                 { label: "Program Yapısı", link: "/dotnet/csharp/program-yapisi" },
                 { label: "C# Tipleri", link: "/dotnet/csharp/tipler"},
                 { label: "Kapsamlı Türler", link: "/dotnet/csharp/kapsamli-turler"},
-              ]
+                { label: "Koşul Yapısı", link: "/dotnet/csharp/kosul-yapisi"},
+                { label: "Cheatsheet", link: "/dotnet/csharp/cheatsheet"},
+              ],
+            },
+            {
+              label: ".NET", items: [
+                { label: "Cheatsheet", link: "/dotnet/dotnet/cheatsheet"},
+              ],
             },
           ]
         }

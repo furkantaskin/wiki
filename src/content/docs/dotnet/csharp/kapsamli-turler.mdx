@@ -5,6 +5,8 @@ description: "C# içinde namespace, class gibi kapsamlı türlere genel bir bak�
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
+
+Bu konuya ileri süreçte geri dönme ihtimalimizi düşünerek alt yapıyı hazırlamak amacıyla giriş yaptım. Dilenirse bu nokta atlanabilir. 
 Buradaki başlık biraz konu dışı görünse de buradaki kastımız aslında namespace, class, record, interface gibi türleri içermektedir. Bunları önceki konularda zaten değinmiştik, sıra detaylıca görmeye geldi.
 
 
@@ -83,3 +85,135 @@ Burada `AnotherMethod` classına ve metoda erişebilmemiz için public alması g
 
 
 ## Class
+
+Aslında bizim OOP'tan hakim olduğumuz tiptir. Bunları Python ve TS üzerinde de sıkça gördük. `new` anahtar kelimesi ile init alır ve referans tipi olarak geçer. Heap üzerinde yer tutar.
+
+Class tanımlaması `[access-modifier] ["class"] [identifier]` şu şekildedir. Hatta Backus-Naur formunda incelersek eğer en temel düzeyde `attributes? class_modifier* 'partial' ? 'class' identifier` şeklinde çıkacaktır.
+
+```csharp {7}
+public class Personnel
+{
+
+}
+
+Personnel myPersonnel = new Personnel();
+Personnel anotherPersonnel = myPersonnel;
+```
+
+Access modifier listesi için [MSDN](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/access-modifiers) detaylı bilgi içermektedir.
+
+Burada önemli kısım `anotherPersonnel` tanımlaması. Çünkü classlar reference tipinde olduğu için `myPersonnel` için yapılacak her türlü değişiklik `anotherPersonnel` değişkenini de etkileyecektir.
+
+Örneğin 
+
+
+```csharp
+namespace LearningDotnet
+{
+    internal class Personnel
+    {
+        internal int _age;
+
+        public Personnel(int age) => _age = age;
+
+        public int GetAge()
+        {
+            return _age;
+        }
+
+        public void SetAge(int age)
+        {
+            _age = age;
+        }
+    }
+
+    internal class Program
+    {
+        private static void Main()
+        {
+            Personnel personnel = new(10);
+            Personnel anotherPersonnel = personnel;
+
+            Console.WriteLine($"Container capacity before update: {personnel.GetAge()} and {anotherPersonnel.GetAge()}");
+
+            personnel.SetAge(20);
+
+            Console.WriteLine($"Container capacity after update: {personnel.GetAge()} and {anotherPersonnel.GetAge()}");
+        }
+    }
+}
+```
+
+Bu durumda ilk çıktıda `Personnel's age before update: 10 and 10` olurken güncelleme sonrası `Personnel's age after update: 20 and 20` olacaktır. Normalde `anotherPersonnel` güncellenmemesine rağmen reference tipinden dolayı otomatik olarak `personnel` ile aynı değerleri alacaktır.
+
+Bu arada bu şekilde tanımlama daha da kısa hale getirilebilir. Örneğin 
+
+```csharp {6-10}
+namespace LearningDotnet
+{
+    internal class Personnel(int age)
+    {
+        private int _age = age;
+        public int Age
+        {
+            get { return _age; }
+            set { _age = value; }
+        }
+    }
+
+    internal class Program
+    {
+        private static void Main()
+        {
+            Personnel personnel = new(10);
+            Personnel anotherPersonnel = personnel;
+
+            Console.WriteLine($"Personnel's age before update: {personnel.Age} and {anotherPersonnel.Age}");
+
+            personnel.Age = 20;
+
+            Console.WriteLine($"Personnel's age after update: {personnel.Age} and {anotherPersonnel.Age}");
+        }
+    }
+}
+```
+
+Dilersek `required` ile ilk init kısmında değer atamayı zorunlu kılabiliriz.
+
+```csharp {7,8,21}
+namespace LearningDotnet
+{
+    internal class Personnel(int age)
+    {
+        private int _age = age;
+
+        public required string Name;
+        public required string Surname;
+
+        public int Age        
+        {
+            get { return _age; }
+            set { _age = value; }
+        }
+    }
+
+    internal class Program
+    {
+        private static void Main()
+        {
+            Personnel personnel = new(10) { Name = "Furkan", Surname = "Taşkın"};
+            Personnel anotherPersonnel = personnel;
+
+            Console.WriteLine($"Personnel's age before update: {personnel.Age} and {anotherPersonnel.Age}");
+
+            personnel.Age = 20;
+
+            Console.WriteLine($"Personnel's age after update: {personnel.Age} and {anotherPersonnel.Age}");
+        }
+    }
+}
+```
+
+Classlar'ı şimdilik bu şekilde tanımladığımızı bilmek yeterli olacaktır. İleri konularda daha detaylıca OOP mantığını işleyebiliriz. 
+
+
